@@ -1,0 +1,18 @@
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.camera-section,
+.speedometer-section {
+    width: 48%;
+    /* Adjust the width of each section as needed */
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.camera-section h2,
+.speedometer-section h2 {
+    text-align: center;
+}

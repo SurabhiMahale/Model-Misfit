@@ -1,0 +1,204 @@
+/* style.css */
+
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
+
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #141627, #6e0dab);
+    /* Black to purple gradient */
+    color: #fff;
+    /* Text color */
+}
+
+/* Header section */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    /* Increased height */
+    padding: 20px;
+    background: linear-gradient(135deg, #141627, #6e0dab);
+    /* Black to purple gradient */
+    color: #fff;
+    /* Text color */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo a {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 20px;
+    /* Added margin for separation */
+}
+
+.search_box {
+    display: flex;
+    align-items: center;
+}
+
+.search_box input {
+    padding: 12px;
+    width: 250px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #6e0dab;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 14px;
+    margin-right: 20px;
+    /* Added margin for separation */
+}
+
+.header-icons .account {
+    display: flex;
+    align-items: center;
+}
+
+.header-icons .account img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+    /* Added margin for separation */
+}
+
+/* Main body section */
+.container {
+    display: flex;
+}
+
+.content {
+    display: flex;
+    flex: 1;
+}
+
+.Main_component {
+    display: flex;
+    flex: 1;
+    /* Take remaining space */
+}
+
+.camera_component,
+.speedometer_component {
+    flex: 1;
+    /* Equal width for both components */
+    background: linear-gradient(135deg, #1d1f2b, #141627);
+    /* Lighter gradient effect */
+    border-radius: 10px;
+    padding: 20px;
+    margin-right: 20px;
+    /* Added margin for separation */
+}
+
+.camera_component h2,
+.speedometer_component h2 {
+    color: #fff;
+    /* Text color */
+    margin-bottom: 20px;
+    /* Added margin for separation */
+}
+
+/* Sidebar section */
+.sidebar {
+    width: 20%;
+    /* Adjust sidebar width as needed */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent background */
+    border-radius: 10px;
+    color: #fff;
+    /* Text color */
+}
+
+.sidebar {
+    width: 20%;
+    /* Adjust sidebar width as needed */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent background */
+    border-radius: 10px;
+    color: #fff;
+    /* Text color */
+    height: 100%;
+    /* Set sidebar height to 100% */
+    overflow-y: auto;
+    /* Add vertical scrollbar if needed */
+}
+
+.side_navbar {
+    padding-right: 50px;
+    margin: 10px;
+}
+
+.side_navbar span {
+    color: #999;
+    /* Adjust color for span */
+    margin: 20px 0;
+    /* Added margin for separation */
+    font-size: 18px;
+    /* Adjust font size */
+}
+
+.error_1 {
+    padding-bottom: 30px;
+}
+
+.side_navbar a {
+    color: #ccc;
+    /* Adjust color for links */
+    display: block;
+    padding: 10px 0;
+    /* Adjust padding */
+    font-size: 16px;
+    /* Adjust font size */
+    transition: background-color 0.3s;
+    /* Add transition effect */
+}
+
+.side_navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Semi-transparent white background on hover */
+    color: #fff;
+    /* Text color on hover */
+}
+
+/* Additional styling */
+/* Ensure your additional styles are here */
+
+/* Menu item searched */
+.menu-item-searched:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent white background on hover */
+    cursor: pointer;
+}
+
+.sidebar h4 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* Additional styling */
+/* Ensure your additional styles are here */
+
+/* Menu item searched */
+.menu-item-searched:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Semi-transparent white background on hover */
+    cursor: pointer;
+}
