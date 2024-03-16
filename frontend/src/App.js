@@ -1,14 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-import Dashboard from './Daahboard';
+
+import { useState } from 'react'
+import './style.css'
+// import Header from 'Header'
+import Header from './Header'
+import Sidebar from './Sidebar'
+import Home from './Home'
+
 function App() {
+  const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
+
+  const OpenSidebar = () => {
+    setOpenSidebarToggle(!openSidebarToggle)
+  }
+
   return (
-    <div className="App">
-      <div>
-        <Dashboard></Dashboard>
-      </div>
+    <div className='grid-container'>
+      <Header OpenSidebar={OpenSidebar}/>
+      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
+      <Home />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
