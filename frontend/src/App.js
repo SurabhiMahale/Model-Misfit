@@ -17,7 +17,7 @@ function App() {
       <Header OpenSidebar={OpenSidebar}/>
       <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
       <Home />
-      <Webcamcomponet/>
+      {/* <Webcamcomponet/> */}
     </div>
     // <Login/>
   )
