@@ -1,0 +1,35 @@
+.settings_body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This line centers the content horizontally along the main axis */
+    align-items: center; 
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    background-color: #1d2634;
+    color: #9e9ea4;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.settings-container{
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: left; 
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+}
+/* .button_settings{
+    margin: 8px 0;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+} */

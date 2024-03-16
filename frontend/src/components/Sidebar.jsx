@@ -1,7 +1,7 @@
 import React from 'react'
 
  
- import { BsExclamationCircleFill, BsGrid1X2Fill, BsFillArchiveFill, BsFillCameraVideoFill, BsPeopleFill, BsListCheck, BsMenuButtonWideFill, BsFillGearFill } from 'react-icons/bs';
+ import { BsExclamationCircleFill, BsGrid1X2Fill, BsFillArchiveFill, BsFillCameraVideoFill } from 'react-icons/bs';
  import { MdSecurity } from "react-icons/md";
  import { TbSettingsFilled } from "react-icons/tb";
  import RiskScore from './RiskScore';
@@ -18,27 +18,27 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
 
         <ul className='sidebar-list'>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/">
                     <BsGrid1X2Fill className='icon'/> Dashboard
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/alert">
                     <BsExclamationCircleFill className='icon'/> Alerts
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="#">
                     <BsFillArchiveFill className='icon'/> Reports
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/setting">
                     <TbSettingsFilled className='icon'/> Settings
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/livecam">
                     <BsFillCameraVideoFill className='icon'/> Live Camera
                 </a>
             </li>
