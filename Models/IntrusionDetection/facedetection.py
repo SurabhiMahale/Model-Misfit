@@ -241,7 +241,7 @@ def recognize_face(frame):
     return False
 
 # Initialize video capture
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 # Check if the camera is opened successfully
 if not cap.isOpened():
