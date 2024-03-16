@@ -8,8 +8,9 @@ const RiskScore = () => {
   useEffect(() => {
     const fetchAnomalyCount = async () => {
       try {
-        const response = await axios.get('YOUR_API_ENDPOINT');
-        const fetchedCount = response.data.anomalyCount; // Adjust according to your API response structure
+        // Simulating API call to get anomaly count
+        // Replace this with your actual API call
+        const fetchedCount = Math.floor(Math.random() * 100); // Random number for demonstration
         setAnomalyCount(fetchedCount);
       } catch (error) {
         console.error('Error fetching anomaly count:', error);
@@ -26,20 +27,22 @@ const RiskScore = () => {
     const options = {
       series: [anomalyCount],
       chart: {
-        height: 350,
+        width: 240,
+        height: 250,
         type: 'radialBar',
         toolbar: {
           show: true
-        }
+        },
+        background: 'transparent'
       },
       plotOptions: {
         radialBar: {
           startAngle: -135,
-          endAngle: 225,
+          endAngle: 135,
           hollow: {
             margin: 0,
             size: '70%',
-            background: '#fff',
+            background: '#dcd8ed',
             image: undefined,
             imageOffsetX: 0,
             imageOffsetY: 0,
@@ -74,11 +77,20 @@ const RiskScore = () => {
             },
             value: {
               formatter: function(val) {
-                return parseInt(val);
+                return `${Number(val)}%`;
               },
               color: '#111',
               fontSize: '36px',
               show: true,
+            },
+            total: {
+              show: true,
+              label: 'Risk Score', // Change label to "Risk Score"
+              fontSize: '22px',
+              fontWeight: 'bold',
+              formatter: function(w) {
+                return anomalyCount; // Display the actual value
+              }
             }
           }
         }
@@ -99,7 +111,7 @@ const RiskScore = () => {
       stroke: {
         lineCap: 'round'
       },
-      labels: ['Percent'],
+      labels: ['Risk Score'], // Change label to "Risk Score"
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -108,9 +120,7 @@ const RiskScore = () => {
   }, [anomalyCount]);
 
   return (
-    <div>
-      <div id="chart"></div>
-    </div>
+    <div id="chart"></div>
   );
 };
 
