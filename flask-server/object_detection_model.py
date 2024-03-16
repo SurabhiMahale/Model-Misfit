@@ -1,4 +1,4 @@
-import torch 
+import torch
 import numpy as np
 import cv2
 from time import time
@@ -8,6 +8,7 @@ import face_recognition
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 
 class ObjectDetection:
     def __init__(self, capture_index):
@@ -34,6 +35,7 @@ class ObjectDetection:
         self.server = smtplib.SMTP('smtp.gmail.com:587')
         self.server.starttls()
         self.server.login(self.from_email, self.password)
+
 
     def predict(self, im0):
         results = self.model(im0)
@@ -76,54 +78,17 @@ class ObjectDetection:
         message.attach(MIMEText(message_body, 'plain'))
         self.server.sendmail(self.from_email, self.to_email, message.as_string())
 
-    def __call__(self):
-        cap = cv2.VideoCapture(self.capture_index)
-        assert cap.isOpened()
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        frame_count = 0
-        email_sent = False
-        while True:
-            self.start_time = time()
-            ret, im0 = cap.read()
-            assert ret
-            results = self.predict(im0)
-            im0, _ = self.plot_bboxes(results, im0)
+    def get_annotated_frame(self, frame):
+        results = self.predict(frame)
+        annotated_frame, _ = self.plot_bboxes(results, frame)
+        self.display_fps(annotated_frame)
+        return annotated_frame
 
-            # Find face locations in the frame
-            face_locations = face_recognition.face_locations(im0)
-        
-            # Encode faces in the frame
-            face_encodings = face_recognition.face_encodings(im0, face_locations)
-
-            # Recognize faces
-            unknown_persons = 0
-            for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-                name = self.recognize_face(face_encoding)
-                # Draw square around the face
-                cv2.rectangle(im0, (left, top), (right, bottom), (0, 255, 0), 2)
-                # Draw name on the square
-                cv2.rectangle(im0, (left, bottom - 35), (right, bottom), (0, 255, 0), cv2.FILLED)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(im0, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                if name == "Unknown":
-                    unknown_persons += 1
-
-            if unknown_persons > 0 and not email_sent:
-                self.send_email(unknown_persons)
-                email_sent = True
-            elif unknown_persons == 0:
-                email_sent = False
-
-            self.display_fps(im0)
-            cv2.imshow('YOLOv8 Detection', im0)
-            frame_count += 1
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-        cap.release()
-        cv2.destroyAllWindows()
-        self.server.quit()
-
-if __name__ == "__main__":
-    detector = ObjectDetection(capture_index=0)
-    detector()
+    def get_annotations(self, frame):
+        face_locations = face_recognition.face_locations(frame)
+        face_encodings = face_recognition.face_encodings(frame, face_locations)
+        annotations = []
+        for face_encoding in face_encodings:
+            name = self.recognize_face(face_encoding)
+            annotations.append(name)
+        return annotations
