@@ -99,5 +99,5 @@ class ObjectDetection:
         cv2.destroyAllWindows()
         server.quit()    
 
-detector = ObjectDetection(capture_index=1)
+detector = ObjectDetection(capture_index=0)
 detector()
