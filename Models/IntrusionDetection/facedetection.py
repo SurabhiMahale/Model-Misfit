@@ -71,26 +71,39 @@ import cv2
 import face_recognition
 import os
 
-# Load known faces
-known_faces_path = "/kaggle/input/face-sample/known faces"
-known_faces = []
-faceList = ["Kenneth"]
+# Load the pre-trained face detection model
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-# Iterate through files in the "known_faces" folder
-for filename in os.listdir(known_faces_path):
-    image_path = os.path.join(known_faces_path, filename)
-    image = face_recognition.load_image_file(image_path)
-    encoding = face_recognition.face_encodings(image)[0]
-    known_faces.append(encoding)
+# Load enrolled face images from the local folder
+enrolled_faces_dir = "face_data/"
+enrolled_faces = []
+for filename in os.listdir(enrolled_faces_dir):
+    if filename.endswith(".jpg"):
+        enrolled_face_path = os.path.join(enrolled_faces_dir, filename)
+        enrolled_face_img = cv2.imread(enrolled_face_path)
+        enrolled_faces.append(enrolled_face_img)
 
-# Open the video file
-video_file = "https://res.cloudinary.com/dp0ayty6p/video/upload/v1705433352/samples/FACESAMPLEvid.mp4"
-video_capture = cv2.VideoCapture(video_file)
+# Function to perform facial recognition
+def recognize_face(frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-# Get video properties
-fps = int(video_capture.get(cv2.CAP_PROP_FPS))
-width = int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-height = int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    for (x, y, w, h) in faces:
+        face_roi = gray[y:y+h, x:x+w]
+
+        # Compare faces with enrolled faces
+        for enrolled_face in enrolled_faces:
+            # Compare faces using some similarity metric (e.g., histogram comparison, deep learning-based face recognition)
+            # Here, we are using simple histogram comparison as an example
+            similarity = cv2.compareHist(cv2.calcHist([face_roi], [0], None, [256], [0, 256]),
+                                         cv2.calcHist([enrolled_face], [0], None, [256], [0, 256]), cv2.HISTCMP_CORREL)
+            if similarity > 0.7:  # Adjust this threshold based on your requirement
+                return True
+
+    return False
+
+# Initialize video capture
+cap = cv2.VideoCapture(1)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
