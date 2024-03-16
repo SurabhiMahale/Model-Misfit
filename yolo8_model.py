@@ -24,7 +24,7 @@ while ret:
         frame_ = results[0].plot()
 
         # visualize
-        cv2.imshow('frame', frame_)
+        cv2.imshow('frame', frame)
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
 
