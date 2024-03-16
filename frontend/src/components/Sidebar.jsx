@@ -1,8 +1,10 @@
 import React from 'react'
 
  
- import { BsCart3, BsGrid1X2Fill, BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsListCheck, BsMenuButtonWideFill, BsFillGearFill } from 'react-icons/bs';
+ import { BsExclamationCircleFill, BsGrid1X2Fill, BsFillArchiveFill, BsFillCameraVideoFill, BsPeopleFill, BsListCheck, BsMenuButtonWideFill, BsFillGearFill } from 'react-icons/bs';
  import { MdSecurity } from "react-icons/md";
+ import { TbSettingsFilled } from "react-icons/tb";
+ import RiskScore from './RiskScore';
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
   return (
@@ -22,26 +24,30 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
-                    <BsFillArchiveFill className='icon'/> Alerts
+                    <BsExclamationCircleFill className='icon'/> Alerts
                 </a>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
-                    <BsFillGrid3X3GapFill className='icon'/> Reports
+                    <BsFillArchiveFill className='icon'/> Reports
                 </a>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
-                    <BsPeopleFill className='icon'/> Settings
+                    <TbSettingsFilled className='icon'/> Settings
                 </a>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
-                    <BsPeopleFill className='icon'/> Live Camera
+                    <BsFillCameraVideoFill className='icon'/> Live Camera
                 </a>
             </li>
-           
         </ul>
+        <div className="risk-score-wrapper">
+            <RiskScore />
+        </div>
+
+        
     </aside>
   )
 }
