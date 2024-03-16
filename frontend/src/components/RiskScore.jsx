@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ApexCharts from 'apexcharts';
-import axios from 'axios';
+// import axios from 'axios';
 
 const RiskScore = () => {
   const [anomalyCount, setAnomalyCount] = useState(60);
