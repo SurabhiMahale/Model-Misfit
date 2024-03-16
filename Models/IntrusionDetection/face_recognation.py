@@ -242,8 +242,11 @@ import numpy as np
 import cv2
 from time import time
 from ultralytics import YOLO
-from ultralytics.utils.plotting import Annotator , colors
+from ultralytics.utils.plotting import Annotator, colors
 import face_recognition
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class ObjectDetection:
     def __init__(self, capture_index):
@@ -254,18 +257,22 @@ class ObjectDetection:
         self.end_time = 0
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-        # Load reference images and encode them
-        self.known_faces = {}
-        self.load_known_faces()
-
-    def load_known_faces(self):
         # Load known faces
+        self.known_faces = {}
         known_people = ["nishant.jpg", "nitesh.jpg", "devang.jpg"]
         for person in known_people:
             name = person.split('.')[0]
             image = face_recognition.load_image_file(person)
             encoding = face_recognition.face_encodings(image)[0]
             self.known_faces[name] = encoding
+
+        # Email configuration
+        self.password = "gnpi egai czue lohr"
+        self.from_email = "niteshbrathod14@gmail.com"
+        self.to_email = "niteshbrathod1432003@gmail.com"
+        self.server = smtplib.SMTP('smtp.gmail.com:587')
+        self.server.starttls()
+        self.server.login(self.from_email, self.password)
 
     def predict(self, im0):
         results = self.model(im0)
@@ -299,12 +306,22 @@ class ObjectDetection:
                 return name
         return "Unknown"
 
+    def send_email(self, object_detected):
+        message = MIMEMultipart()
+        message['From'] = self.from_email
+        message['To'] = self.to_email
+        message['Subject'] = "Security Alert"
+        message_body = f'ALERT - {object_detected} unknown person detected!!'
+        message.attach(MIMEText(message_body, 'plain'))
+        self.server.sendmail(self.from_email, self.to_email, message.as_string())
+
     def __call__(self):
         cap = cv2.VideoCapture(self.capture_index)
         assert cap.isOpened()
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         frame_count = 0
+        email_sent = False
         while True:
             self.start_time = time()
             ret, im0 = cap.read()
@@ -319,6 +336,7 @@ class ObjectDetection:
             face_encodings = face_recognition.face_encodings(im0, face_locations)
 
             # Recognize faces
+            unknown_persons = 0
             for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
                 name = self.recognize_face(face_encoding)
                 # Draw square around the face
@@ -327,6 +345,14 @@ class ObjectDetection:
                 cv2.rectangle(im0, (left, bottom - 35), (right, bottom), (0, 255, 0), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(im0, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                if name == "Unknown":
+                    unknown_persons += 1
+
+            if unknown_persons > 0 and not email_sent:
+                self.send_email(unknown_persons)
+                email_sent = True
+            elif unknown_persons == 0:
+                email_sent = False
 
             self.display_fps(im0)
             cv2.imshow('YOLOv8 Detection', im0)
@@ -335,6 +361,8 @@ class ObjectDetection:
                 break
         cap.release()
         cv2.destroyAllWindows()
+        self.server.quit()
 
 detector = ObjectDetection(capture_index=0)
 detector()
+
