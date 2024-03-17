@@ -248,6 +248,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pymongo
+from datetime import datetime
+
 class ObjectDetection:
     def __init__(self, capture_index):
         self.capture_index = capture_index
@@ -320,7 +322,8 @@ class ObjectDetection:
             match = face_recognition.compare_faces([known_encoding], face_encoding)
             if match[0]:
                 return name
-        self.insert_incident("Unknown person detected", frame_timestamp)
+            
+        self.insert_incident("Unknown person detected", datetime.now())
         return "Unknown"
 
     def send_email(self, object_detected):

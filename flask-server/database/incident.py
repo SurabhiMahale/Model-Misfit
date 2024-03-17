@@ -63,17 +63,12 @@ incidents_to_insert = [
     "Unknown access",
     "Fire detected",
     "Mob detected",
-    "Unknown access",
-    "Fire detected",
     "Mob detected",
-    "Unknown access",
-    "Fire detected",
     "Mob detected",
-    "Unknown access"
 ]
 
 # Insert each incident
-# for incident in incidents_to_insert:
-#     insert_incident(incident)
+for incident in incidents_to_insert:
+    insert_incident(incident)
 
 # print(retrieve_incidents())
