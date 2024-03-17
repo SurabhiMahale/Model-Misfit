@@ -247,10 +247,15 @@ import face_recognition
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+import pymongo
 class ObjectDetection:
     def __init__(self, capture_index):
         self.capture_index = capture_index
+
+        self.client = pymongo.MongoClient("mongodb+srv://nishant123:nishant123@firstproject.wami2av.mongodb.net/?retryWrites=true&w=majority&appName=firstproject")
+        self.db = self.client["incidentDB"]
+        self.collection = self.db["unkowns"]
+
         self.model = YOLO("yolov8n.pt")
         self.annotator = None
         self.start_time = 0
@@ -273,6 +278,17 @@ class ObjectDetection:
         self.server = smtplib.SMTP('smtp.gmail.com:587')
         self.server.starttls()
         self.server.login(self.from_email, self.password)
+    
+
+    def insert_incident(self, incident_name, timestamp):
+        # Create incident document
+        incident = {
+            "incidentName": incident_name,
+            "timestamp": timestamp
+        }
+        # Insert the incident document into the collection
+        result = self.collection.insert_one(incident)
+        print("Inserted document ID:", result.inserted_id)
 
     def predict(self, im0):
         results = self.model(im0)
@@ -304,6 +320,7 @@ class ObjectDetection:
             match = face_recognition.compare_faces([known_encoding], face_encoding)
             if match[0]:
                 return name
+        self.insert_incident("Unknown person detected", frame_timestamp)
         return "Unknown"
 
     def send_email(self, object_detected):

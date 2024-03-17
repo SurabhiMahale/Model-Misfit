@@ -5,54 +5,37 @@ import Webcam from 'react-webcam';
 import axios from 'axios';
 
 const WebcamComponent = () => {
-  const webcamRef = useRef(null);
-  const [results, setResults] = useState([]);
-  const intervalRef = useRef(null);
-
-  const sendFrameToServer = async () => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
-      const blob = await fetch(imageSrc).then(res => res.blob());
-      const formData = new FormData();
-      formData.append('image', blob, 'frame.jpeg');
-      try {
-        const response = await axios.post('http://localhost:5001/detect', formData);
-        setResults(response.data);
-      } catch (error) {
-        console.error('Error processing frame:', error);
-      }
-    }
-  };
+  const [frame, setFrame] = useState(null);
+  const [annotations, setAnnotations] = useState([]);
 
   useEffect(() => {
-    // Start sending frames at the specified interval
-    intervalRef.current = setInterval(() => {
-      sendFrameToServer();
-    }, 500); // Send frame every 500 milliseconds
+    const fetchData = async () => {
+      const videoStream = await fetch('http://127.0.0.1:5001/video_feed');
+      const annotationsData = await fetch('/annotations');
 
-    // Stop sending frames when the component unmounts
-    return () => clearInterval(intervalRef.current);
+      // Process annotations
+      const annotationsJson = await annotationsData.json();
+      setAnnotations(annotationsJson);
+
+      // Process video stream
+      const videoBlob = await videoStream.blob();
+      const videoUrl = URL.createObjectURL(videoBlob);
+      setFrame(videoUrl);
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div>
-      <Webcam
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-      />
-      {/* Display results */}
-      <div>
-        {results && results.objects && results.objects.map((obj, index) => (
-          <div key={index}>
-            <p>Type: {obj.type}</p>
-          </div>
+      <h1>Object Detection</h1>
+      {frame && <img src={frame} alt="Video Stream" />}
+      <ul>
+        {annotations.map((annotation, index) => (
+          <li key={index}>{annotation}</li>
         ))}
-        {results && results.faces && results.faces.map((face, index) => (
-          <div key={index}>
-            <p>Name: {face.name}</p>
-          </div>
-        ))}
-      </div>
+      </ul>
+
     </div>
   );
 };
