@@ -5,8 +5,21 @@ import React from 'react'
  import { MdSecurity } from "react-icons/md";
  import { TbSettingsFilled } from "react-icons/tb";
  import RiskScore from './RiskScore';
+ import axios from 'axios'
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
+    const handleClick = async () => {
+        try {
+          const response = await axios.post('http://127.0.0.1:5001/generate-csv', {}, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log('CSV file generated successfully');
+        } catch (error) {
+          console.error('Error generating CSV file:', error.message);
+        }
+      };
   return (
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
         <div className='sidebar-title'>
@@ -17,6 +30,11 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
         </div>
 
         <ul className='sidebar-list'>
+        <li className='sidebar-list-item'>
+                <a href="/Video">
+                    <BsFillArchiveFill className='icon'/> Live Mointoring
+                </a>
+            </li>
             <li className='sidebar-list-item'>
                 <a href="/">
                     <BsGrid1X2Fill className='icon'/> Dashboard
@@ -38,7 +56,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="/livecam">
+                <a href="/livecam" onClick={handleClick}>
                     <BsFillCameraVideoFill className='icon'/> Live Camera
                 </a>
             </li>

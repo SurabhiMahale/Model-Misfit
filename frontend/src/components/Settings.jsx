@@ -19,21 +19,21 @@ const Settings = ({ handleSettingsChange }) => {
     setSettings({ ...settings, [name]: checked });
   };
 
-  // const saveSettings = async () => {
-  //   try {
-  //     const response = await axios.post("/api/settings", settings);
+  const saveSettings = async () => {
+    try {
+      const response = await axios.post("/api/settings", settings);
 
-  //     if (response.status === 200) {
-  //       console.log("Settings saved successfully");
-  //       // Pass the updated settings to the parent component
-  //       handleSettingsChange(settings);
-  //     } else {
-  //       console.error("Failed to save settings");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error saving settings:", error);
-  //   }
-  // };
+      if (response.status === 200) {
+        console.log("Settings saved successfully");
+        // Pass the updated settings to the parent component
+        handleSettingsChange(settings);
+      } else {
+        console.error("Failed to save settings");
+      }
+    } catch (error) {
+      console.error("Error saving settings:", error);
+    }
+  };
 
   return (
     <div className="settings_body">

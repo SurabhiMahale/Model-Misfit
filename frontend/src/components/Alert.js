@@ -10,29 +10,30 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import '../styles/alert_styles.css';
 
-const Alert = ({ settings }) => {
+const AlertStack = () => {
     const [alerts, setAlerts] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessages, setSnackbarMessages] = useState([]);
 
     useEffect(() => {
         const knownUserTimer = setInterval(() => {
-            if (settings.fireAlert) createAlert('Fire Alert', 'error');
-            if (settings.intrusionAlert) createAlert('Intrusion Alert', 'warning');
-            if (settings.violenceAlert) createAlert('Violence Alert', 'error');
-            if (settings.weaponAlert) createAlert('Weapon Alert', 'error');
-            if (settings.theftAlert) createAlert('Theft Alert', 'warning');
+            createAlert('Known User Alert', 'info', 'known');
+        }, 10000);
+
+        const unknownUserTimer = setInterval(() => {
+            createAlert('Unknown User Alert', 'warning', 'unknown');
         }, 5000);
 
         return () => {
             clearInterval(knownUserTimer);
+            clearInterval(unknownUserTimer);
         };
-    }, [settings]);
+    }, []);
 
-    const createAlert = (message, type) => {
+    const createAlert = (message, type, userType) => {
         const newAlert = { id: Date.now(), message, type };
         setAlerts((prevAlerts) => [...prevAlerts, newAlert]);
-        setSnackbarMessages((prevMessages) => [...prevMessages, message]);
+        setSnackbarMessages([message]);
         setSnackbarOpen(true);
         setTimeout(() => {
             removeAlert(newAlert.id);
@@ -74,4 +75,4 @@ const Alert = ({ settings }) => {
     );
 };
 
-export default Alert;
+export default AlertStack;
