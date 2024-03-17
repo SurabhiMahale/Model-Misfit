@@ -128,8 +128,7 @@ body {
 }
 .risk-score-wrapper {
     width: 100%;
-    height: calc(100% - 150px); /* Adjust as needed based on the height of other sidebar elements */
-    /* Add any additional styling for the wrapper */
+    height: fit-content;
     transition: transform 0.3s ease;
 }
 
@@ -237,7 +236,7 @@ body {
 /* Extra Small <= 576px */
 
 @media screen and (max-width: 576px) {
-    .hedaer-left {
+    .header-left {
         display: none;
     }
 }
