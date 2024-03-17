@@ -11,6 +11,7 @@ function Header({OpenSidebar}) {
         </div>
         <div className='header-left'>
             <BsSearch  className='icon'/>
+            <placeholder>Search...</placeholder>
         </div>
         <div className='header-right'>
             <BsFillBellFill className='icon'/>
