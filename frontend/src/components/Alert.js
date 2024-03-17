@@ -6,54 +6,72 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import '../styles/alert_styles.css';
 
-const AlertStack = () => {
+const Alert = ({ settings }) => {
+    const [alerts, setAlerts] = useState([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessages, setSnackbarMessages] = useState([]);
 
-    //#################### use after backned integration ####################
-//   const [alerts, setAlerts] = useState([]);
+    useEffect(() => {
+        const knownUserTimer = setInterval(() => {
+            if (settings.fireAlert) createAlert('Fire Alert', 'error');
+            if (settings.intrusionAlert) createAlert('Intrusion Alert', 'warning');
+            if (settings.violenceAlert) createAlert('Violence Alert', 'error');
+            if (settings.weaponAlert) createAlert('Weapon Alert', 'error');
+            if (settings.theftAlert) createAlert('Theft Alert', 'warning');
+        }, 5000);
 
-//   useEffect(() => {
-//     const fetchAlerts = async () => {
-//       try {
-//         const response = await axios.get('/api/alerts'); // Replace with your backend endpoint
-//         setAlerts(response.data.alerts); // Assuming the response contains an array of alerts
-//       } catch (error) {
-//         console.error('Error fetching alerts:', error);
-//       }
-//     };
+        return () => {
+            clearInterval(knownUserTimer);
+        };
+    }, [settings]);
 
-//     fetchAlerts();
-//   }, []);
+    const createAlert = (message, type) => {
+        const newAlert = { id: Date.now(), message, type };
+        setAlerts((prevAlerts) => [...prevAlerts, newAlert]);
+        setSnackbarMessages((prevMessages) => [...prevMessages, message]);
+        setSnackbarOpen(true);
+        setTimeout(() => {
+            removeAlert(newAlert.id);
+            setSnackbarOpen(false);
+        }, 6000);
+    };
 
-//   const removeAlert = (index) => {
-//     setAlerts((prevAlerts) => prevAlerts.filter((_, i) => i !== index));
-//   };
-const [alerts, setAlerts] = useState([
-    { id: 1, message: 'Alert 1', type: 'info' },
-    { id: 2, message: 'Alert 2', type: 'warning' },
-    { id: 3, message: 'Alert 3', type: 'error' },
-  ]);
+    const removeAlert = (id) => {
+        setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
+    };
 
-  const removeAlert = (id) => {
-    setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== id));
-  };
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
 
-  return (
-    <Box className="box" sx={{ flexGrow: 1, maxWidth: 752 }}>
-      <List className="alert-list"> {/* Add the class name */}
-        {alerts.map((alert) => (
-          <ListItem key={alert.id} className="alert-item"> {/* Add the class name */}
-            <ListItemText primary={alert.message} />
-            <IconButton edge="end" aria-label="delete" onClick={() => removeAlert(alert.id)}>
-              <DeleteIcon className="delete-icon" /> {/* Add the class name */}
-            </IconButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+    return (
+        <Box className="box" sx={{ flexGrow: 1, maxWidth: 752 }}>
+            <List className="alert-list">
+                {alerts.map((alert) => (
+                    <ListItem key={alert.id} className="alert-item">
+                        <ListItemText primary={alert.message} />
+                        <IconButton edge="end" aria-label="delete" onClick={() => removeAlert(alert.id)}>
+                            <DeleteIcon className="delete-icon" />
+                        </IconButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+                    {snackbarMessages.join('\n')}
+                </MuiAlert>
+            </Snackbar>
+        </Box>
+    );
 };
 
-export default AlertStack;
+export default Alert;
