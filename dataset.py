@@ -1,106 +1,40 @@
+import pandas as pd
+import numpy as np
 import random
 from datetime import datetime, timedelta
-import csv
 
+# Define parameters
+num_cameras = 5  # Number of cameras
+num_motion_sensors = 10  # Number of motion sensors
+num_door_window_sensors = 8  # Number of door/window sensors
 
-def generate_event(base_time):
-    """
-    Generates a random sensor event with details, ensuring no empty fields.
-    """
+# Generate timestamps for the dataset (100-150 rows)
+start_date = datetime(2024, 1, 1)
+timestamps = [start_date + timedelta(seconds=random.randint(0, 2592000)) for _ in range(0, 151)]
 
-    # Randomly choose sensor type
-    sensor_type = random.choice(["Camera", "Motion Sensor", "Door Sensor", "Window Sensor"])
+# Initialize an empty list to store all data
+all_data = []
 
-    # Randomly choose zone
-    zone = random.choice(["Lobby", "Main Entrance", "Hallway", "Room 1", "Room 2"])
+# Generate camera data
+for ts in timestamps:
+    for camera_id in range(1, num_cameras + 1):
+        object_detected = random.choice(['Person', 'Vehicle', 'Animal', 'None'])
+        all_data.append({'Timestamp': ts, 'SensorType': 'Camera', 'SensorID': camera_id, 'Event': object_detected})
 
-    # Generate random timestamp within a specific time range
-    timestamp = base_time + timedelta(minutes=random.randint(0, 59))
-    timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+# Generate motion sensor data
+for ts in timestamps:
+    for sensor_id in range(1, num_motion_sensors + 1):
+        intensity = random.uniform(0, 1)
+        all_data.append({'Timestamp': ts, 'SensorType': 'MotionSensor', 'SensorID': sensor_id, 'Event': intensity})
 
-    # Ensure objects list for cameras is not empty
-    objects = ["Person", "Vehicle", "door", "window", "bag"]  # Valid object detections
+# Generate door/window sensor data
+for ts in timestamps:
+    for sensor_id in range(1, num_door_window_sensors + 1):
+        event = random.choice(['Open', 'Close', 'None'])
+        all_data.append({'Timestamp': ts, 'SensorType': 'DoorWindowSensor', 'SensorID': sensor_id, 'Event': event})
 
-    # Additional details based on sensor type (no empty fields)
-    event_data = {
-        "Sensor Type": sensor_type,
-        "Zone": zone,
-        "Timestamp": timestamp_str,
-    }
+# Convert the list of dictionaries to a DataFrame
+df = pd.DataFrame(all_data)
 
-    if sensor_type == "Camera":
-        event_data["Object Detected"] = random.choice(objects)  # Ensure object detection
-    elif sensor_type == "Motion Sensor":
-        event_data["Movement Detected"] = "Yes" if random.random() < 0.5 else "No"
-    else:  # Door Sensor or Window Sensor
-        event_data["Open/Closed"] = "Open" if random.random() < 0.5 else "Closed"
-
-    return event_data  # All fields will have values
-
-
-# ... rest of the code remains unchanged
-
-def generate_event(base_time):
-    """
-    Generates a random sensor event with details, ensuring no empty fields.
-    """
-
-    # Randomly choose sensor type
-    sensor_type = random.choice(["Camera", "Motion Sensor", "Door Sensor", "Window Sensor"])
-
-    # Randomly choose zone
-    zone = random.choice(["Lobby", "Main Entrance", "Hallway", "Room 1", "Room 2"])
-
-    # Generate random timestamp within a specific time range
-    timestamp = base_time + timedelta(minutes=random.randint(0, 59))
-    timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-
-    # Ensure objects list for cameras is not empty
-    objects = ["Person", "Vehicle", "door", "window", "bag"]  # Valid object detections
-
-    # Additional details based on sensor type (no empty fields)
-    event_data = {
-        "Sensor Type": sensor_type,
-        "Zone": zone,
-        "Timestamp": timestamp_str,
-    }
-
-    if sensor_type == "Camera":
-        event_data["Object Detected"] = random.choice(objects)  # Ensure object detection
-    elif sensor_type == "Motion Sensor":
-        event_data["Movement Detected"] = "Yes" if random.random() < 0.7 else "No"
-    else:  # Door Sensor or Window Sensor
-        event_data["Open/Closed"] = "Open" if random.random() < 0.7 else "Closed"
-
-    return event_data  # All fields will have values
-
-
-# ... rest of the code remains unchanged
-
-
-def generate_dataset(num_events, base_time=datetime(2024, 3, 18)):
-    """
-    Generates a list of sensor events for a specified number of events.
-    """
-    events = []
-    for _ in range(num_events):
-        event = generate_event(base_time)
-        events.append(event)
-    return events
-
-
-# Generate a dataset with 100 events
-dataset = generate_dataset(100)
-
-# Get all unique field names from the dataset
-fieldnames = set()
-for event in dataset:
-    fieldnames.update(event.keys())
-
-# Write the dataset to a CSV file
-with open("sensor_events.csv", "w", newline="") as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=sorted(fieldnames))
-    writer.writeheader()
-    writer.writerows(dataset)
-
-print("Sensor data generated and saved to sensor_events.csv")
+# Save the DataFrame to a CSV file
+df.to_csv('multi_sensor_data.csv', index=False)
