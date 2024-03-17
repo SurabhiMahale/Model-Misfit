@@ -42,6 +42,11 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                     <BsFillCameraVideoFill className='icon'/> Live Camera
                 </a>
             </li>
+             <li className='sidebar-list-item'>
+                <a href="/Video">
+                    <BsFillArchiveFill className='icon'/> Recorded Videos
+                </a>
+            </li>
         </ul>
         <div className="risk-score-wrapper">
             <RiskScore />
