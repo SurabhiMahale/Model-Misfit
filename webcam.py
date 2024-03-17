@@ -1,15 +1,15 @@
-# from ultralytics import YOLO
-# import cv2
-# import math
-# import numpy as np
-# import time
-# import numpy as np
-# import cv2
-# import pygame
-# import matplotlib.pyplot as plt
-# import torch
-# import numpy as np
-# import pygame
+from ultralytics import YOLO
+import cv2
+import math
+import numpy as np
+import time
+import numpy as np
+import cv2
+import pygame
+import matplotlib.pyplot as plt
+import torch
+import numpy as np
+import pygame
 
 # # Initialize pygame
 # pygame.mixer.init()
@@ -338,14 +338,99 @@
 
 
 
-from ultralytics import YOLO
+# from ultralytics import YOLO
+# import cv2
+
+# # Initialize your custom models
+# fire_model = YOLO("Models/Fire Detection/fire.pt")
+# violence_model = YOLO("Models/Violence Detection/ViolenceDet.pt")
+# weapons_model = YOLO("Models/weapon Detection/best.pt")
+# generic_model = YOLO("yolov8n.pt")
+
+# # Define classes for each model
+# classes = {
+#     "fire": ["fire", "smoke"],
+#     "violence": ["violence", "weapons"],
+#     "weapons": ["weapon"],
+#     "generic": ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+#                 "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+#                 "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+#                 "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+#                 "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+#                 "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+#                 "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+#                 "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+#                 "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+#                 "teddy bear", "hair drier", "toothbrush"
+#                 ]
+# }
+
+# # Function to draw bounding boxes and labels on the image
+# def draw_boxes(img, boxes, class_names, color=(0, 255, 0), thickness=2):
+#     for box in boxes:
+#         x, y, w, h, conf, cls = box
+#         class_name = class_names[int(cls)]
+#         cv2.rectangle(img, (int(x - w / 2), int(y - h / 2)), (int(x + w / 2), int(y + h / 2)), color, thickness)
+#         cv2.putText(img, class_name, (int(x - w / 2), int(y - h / 2 - 5)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, thickness)
+
+# # Initialize video capture
+# cap = cv2.VideoCapture(0)  # Use camera index 0 (default webcam)
+
+# # Main loop for real-time analysis
+# while True:
+#     ret, frame = cap.read()  # Read frame from the video capture
+#     if not ret:
+#         print("Error: Unable to capture frame")
+#         break
+    
+#     # Perform analysis with fire detection model
+#     fire_results = fire_model(frame)
+    
+#     # Check if fire_results is empty or a list
+#     if not fire_results or isinstance(fire_results, list):
+#         print("No objects detected by fire detection model")
+#         fire_boxes = []
+#     else:
+#         # Assuming the first item in the list contains the detection results
+#         fire_boxes = fire_results.xyxy[0].numpy()
+    
+#     # Perform analysis with violence detection model
+#     violence_results = violence_model(frame)
+#     ...
+#     # Perform analysis with weapons detection model
+#     weapons_results = weapons_model(frame)
+#     ...
+#     # Perform analysis with generic object detection model
+#     generic_results = generic_model(frame)
+#     ...
+
+#     # Display the processed frame with detections
+#     cv2.imshow("Real-Time Analysis", frame)
+
+#     # Check for key press to exit
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+# # Release video capture object and close windows
+# cap.release()
+# cv2.destroyAllWindows()
+
+
+import numpy as np
 import cv2
+import pygame
 
 # Initialize your custom models
 fire_model = YOLO("Models/Fire Detection/fire.pt")
 violence_model = YOLO("Models/Violence Detection/ViolenceDet.pt")
 weapons_model = YOLO("Models/weapon Detection/best.pt")
 generic_model = YOLO("yolov8n.pt")
+
+# Initialize pygame
+pygame.mixer.init()
+
+# Load siren sound
+siren_sound = pygame.mixer.Sound('police-6007.mp3')
 
 # Define classes for each model
 classes = {
@@ -388,21 +473,44 @@ while True:
     
     # Check if fire_results is empty or a list
     if not fire_results or isinstance(fire_results, list):
-        print("No objects detected by fire detection model")
+        # print("No objects detected by fire detection model")
         fire_boxes = []
     else:
         # Assuming the first item in the list contains the detection results
         fire_boxes = fire_results.xyxy[0].numpy()
+        # Play siren sound if fire is detected
+        siren_sound.play()
     
     # Perform analysis with violence detection model
     violence_results = violence_model(frame)
-    ...
+    if not violence_results or isinstance(violence_results, list):
+        # print("No objects detected by violence detection model")
+        violence_boxes = []
+    else:
+        # Assuming the first item in the list contains the detection results
+        violence_boxes = violence_results.xyxy[0].numpy()
+        # Play siren sound if violence is detected
+        siren_sound.play()
+    
     # Perform analysis with weapons detection model
     weapons_results = weapons_model(frame)
-    ...
+    if not weapons_results or isinstance(weapons_results, list):
+        # print("No objects detected by weapon detection model")
+        weapons_boxes = []
+    else:
+        # Assuming the first item in the list contains the detection results
+        weapons_boxes = weapons_results.xyxy[0].numpy()
+        # Play siren sound if weapons are detected
+        siren_sound.play()
+    
     # Perform analysis with generic object detection model
     generic_results = generic_model(frame)
-    ...
+    if not generic_results or isinstance(generic_results, list):
+        # print("No objects detected by generic detection model")
+        generic_boxes = []
+    else:
+        # Assuming the first item in the list contains the detection results
+        generic_boxes = generic_results.xyxy[0].numpy()
 
     # Display the processed frame with detections
     cv2.imshow("Real-Time Analysis", frame)
