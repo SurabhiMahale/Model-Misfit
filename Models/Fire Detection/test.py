@@ -32,7 +32,7 @@ def detect_objects_in_video(video_path):
     width = int(video_capture.get(3))
     height = int(video_capture.get(4))
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    result_video_path = "detected_objects_video2.avi"
+    result_video_path = "video2.avi"
     out = cv2.VideoWriter(result_video_path, fourcc, 20.0, (width, height))
 
     while True:
@@ -121,5 +121,5 @@ def detect_objects_in_video(video_path):
 #     cv2.destroyAllWindows()
 
 # Call the function to start real-time object detection
-video_path = "test.mp4"
+video_path = "dalma_400240.mp4"
 detect_objects_in_video(video_path)
