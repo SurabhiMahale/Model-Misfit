@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './styles/style.css'
+import Video from './components/Recordeded_Video'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import Home from './components/Home'
@@ -44,10 +45,16 @@ function App() {
             <Route path="/livecam" element={<>
             <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
             <WebcamComponent /></>} />
+                <Route path="/Video" element={<>
+            <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+            <Video /></>} />
 
         </Routes>
       </div>
+                  
+
     </Router>
+    
   );
 }
 
